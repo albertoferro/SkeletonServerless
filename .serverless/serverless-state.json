@@ -9,8 +9,8 @@
       "runtime": "nodejs12.x",
       "lambdaHashingVersion": "20201221",
       "profile": "serverlessUser",
+      "region": "us-west-2",
       "stage": "dev",
-      "region": "us-east-1",
       "versionFunctions": true,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -175,7 +175,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pruebaserverless/dev/1637863811553-2021-11-25T18:10:11.553Z/pruebaserverless.zip"
+                "S3Key": "serverless/pruebaserverless/dev/1637865929303-2021-11-25T18:45:29.303Z/pruebaserverless.zip"
               },
               "Handler": "handler.hello",
               "Runtime": "nodejs12.x",
@@ -193,14 +193,20 @@
               "HelloLogGroup"
             ]
           },
-          "HelloLambdaVersion7NptgYraA8GtKWrve2hqiaDKKlG7e1jt6K7oGqG37s": {
+          "HelloLambdaVersionNItMX47ZKMjArWpNomGa3AVZPoxMnn0jiI6yGLCqw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HelloLambdaFunction"
               },
-              "CodeSha256": "I5lx9rW4OGWkMuaCd5khR70iPK8UbCZ3eYacPX6CiJ8="
+              "CodeSha256": "xJmYTKWCog8l1QtoJE5kZ8Ky8pgLM1VDziqLlDr9o0o="
+            }
+          },
+          "NewResource": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketName": "serverless-albertoferro"
             }
           }
         },
@@ -216,7 +222,7 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersion7NptgYraA8GtKWrve2hqiaDKKlG7e1jt6K7oGqG37s"
+              "Ref": "HelloLambdaVersionNItMX47ZKMjArWpNomGa3AVZPoxMnn0jiI6yGLCqw"
             },
             "Export": {
               "Name": "sls-pruebaserverless-dev-HelloLambdaFunctionQualifiedArn"
@@ -308,6 +314,15 @@
       },
       "vpc": {}
     },
+    "custom": {
+      "s3Sync": [
+        {
+          "bucketName": "serverless-albertoferro",
+          "localDir": "UploadData"
+        }
+      ]
+    },
+    "plugins": "-serverless-s3-sync",
     "pluginsData": {},
     "functions": {
       "hello": {
@@ -319,8 +334,19 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersion7NptgYraA8GtKWrve2hqiaDKKlG7e1jt6K7oGqG37s"
+        "versionLogicalId": "HelloLambdaVersionNItMX47ZKMjArWpNomGa3AVZPoxMnn0jiI6yGLCqw"
       }
+    },
+    "resources": {
+      "Resources": {
+        "NewResource": {
+          "Type": "AWS::S3::Bucket",
+          "Properties": {
+            "BucketName": "serverless-albertoferro"
+          }
+        }
+      },
+      "Outputs": {}
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
@@ -332,16 +358,25 @@
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
+      "plugins": [
+        "-serverless-s3-sync"
+      ],
+      "custom": {
+        "$ref": "$[\"service\"][\"custom\"]"
+      },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
       }
     },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "D:\\Proyectos\\serverless\\pruebaServerless\\.serverless\\pruebaserverless.zip"
+    "artifact": "D:\\Proyectos\\serverless\\SkeletonServerless\\.serverless\\pruebaserverless.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/pruebaserverless/dev/1637863811553-2021-11-25T18:10:11.553Z",
+    "artifactDirectoryName": "serverless/pruebaserverless/dev/1637865929303-2021-11-25T18:45:29.303Z",
     "artifact": "pruebaserverless.zip"
   }
 }

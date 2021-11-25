@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/pruebaserverless/dev/1637863811553-2021-11-25T18:10:11.553Z/pruebaserverless.zip"
+          "S3Key": "serverless/pruebaserverless/dev/1637865929303-2021-11-25T18:45:29.303Z/pruebaserverless.zip"
         },
         "Handler": "handler.hello",
         "Runtime": "nodejs12.x",
@@ -179,14 +179,20 @@
         "HelloLogGroup"
       ]
     },
-    "HelloLambdaVersion7NptgYraA8GtKWrve2hqiaDKKlG7e1jt6K7oGqG37s": {
+    "HelloLambdaVersionNItMX47ZKMjArWpNomGa3AVZPoxMnn0jiI6yGLCqw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "I5lx9rW4OGWkMuaCd5khR70iPK8UbCZ3eYacPX6CiJ8="
+        "CodeSha256": "xJmYTKWCog8l1QtoJE5kZ8Ky8pgLM1VDziqLlDr9o0o="
+      }
+    },
+    "NewResource": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "serverless-albertoferro"
       }
     }
   },
@@ -202,7 +208,7 @@
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersion7NptgYraA8GtKWrve2hqiaDKKlG7e1jt6K7oGqG37s"
+        "Ref": "HelloLambdaVersionNItMX47ZKMjArWpNomGa3AVZPoxMnn0jiI6yGLCqw"
       },
       "Export": {
         "Name": "sls-pruebaserverless-dev-HelloLambdaFunctionQualifiedArn"
