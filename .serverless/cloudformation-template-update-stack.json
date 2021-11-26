@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/pruebaserverless/dev/1637865929303-2021-11-25T18:45:29.303Z/pruebaserverless.zip"
+          "S3Key": "serverless/pruebaserverless/dev/1637926239068-2021-11-26T11:30:39.068Z/pruebaserverless.zip"
         },
         "Handler": "handler.hello",
         "Runtime": "nodejs12.x",
