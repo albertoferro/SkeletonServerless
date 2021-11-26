@@ -175,7 +175,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/AlbertoFerroSLS/dev/1637949168633-2021-11-26T17:52:48.633Z/AlbertoFerroSLS.zip"
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1637949472301-2021-11-26T17:57:52.301Z/AlbertoFerroSLS.zip"
               },
               "Handler": "lambdas/getUser.handler",
               "Runtime": "nodejs12.x",
@@ -333,7 +333,7 @@
               "GetUserLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1637949165184": {
+          "ApiGatewayDeployment1637949468632": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -386,7 +386,7 @@
           "BucketUpload": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
-              "BucketName": "serverless-albertoferro"
+              "BucketName": "albertoferro-sls"
             }
           },
           "MyDynamoDBTable": {
@@ -592,7 +592,7 @@
         "BucketUpload": {
           "Type": "AWS::S3::Bucket",
           "Properties": {
-            "BucketName": "serverless-albertoferro"
+            "BucketName": "albertoferro-sls"
           }
         },
         "MyDynamoDBTable": {
@@ -645,7 +645,7 @@
     "artifact": "D:\\Proyectos\\serverless\\SkeletonServerless\\.serverless\\AlbertoFerroSLS.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/AlbertoFerroSLS/dev/1637949168633-2021-11-26T17:52:48.633Z",
+    "artifactDirectoryName": "serverless/AlbertoFerroSLS/dev/1637949472301-2021-11-26T17:57:52.301Z",
     "artifact": "AlbertoFerroSLS.zip"
   }
 }

@@ -36,7 +36,7 @@ resources:
    BucketUpload:
      Type: AWS::S3::Bucket
      Properties:
-       BucketName: serverless-albertoferro
+       BucketName: albertoferro-sls
    MyDynamoDBTable:
      Type: AWS::DynamoDB::Table
      Properties:
