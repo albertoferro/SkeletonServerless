@@ -193,7 +193,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965879904-2021-11-26T22:31:19.904Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/getUser.handler",
         "Runtime": "nodejs12.x",
@@ -224,7 +224,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965879904-2021-11-26T22:31:19.904Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/getPlayerScore.handler",
         "Runtime": "nodejs12.x",
@@ -255,7 +255,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965879904-2021-11-26T22:31:19.904Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/createPlayerScore.handler",
         "Runtime": "nodejs12.x",
@@ -286,7 +286,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965879904-2021-11-26T22:31:19.904Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/createFile.handler",
         "Runtime": "nodejs12.x",
@@ -317,7 +317,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965879904-2021-11-26T22:31:19.904Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/getFile.handler",
         "Runtime": "nodejs12.x",
@@ -993,7 +993,7 @@
         "GetFileLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1637965399922": {
+    "ApiGatewayDeployment1637965876576": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1014,11 +1014,11 @@
         "ApiGatewayMethodGetDashfileFilenameVarGet"
       ]
     },
-    "ApiGatewayApiKey1": {
+    "ApiGatewayApiKeyFree1": {
       "Type": "AWS::ApiGateway::ApiKey",
       "Properties": {
         "Enabled": true,
-        "Name": "-MyFirstIPIKey",
+        "Name": "myFreeApiKey",
         "StageKeys": [
           {
             "RestApiId": {
@@ -1028,11 +1028,27 @@
           }
         ]
       },
-      "DependsOn": "ApiGatewayDeployment1637965399922"
+      "DependsOn": "ApiGatewayDeployment1637965876576"
     },
-    "ApiGatewayUsagePlan": {
+    "ApiGatewayApiKeyPaid1": {
+      "Type": "AWS::ApiGateway::ApiKey",
+      "Properties": {
+        "Enabled": true,
+        "Name": "myPaidApiKey",
+        "StageKeys": [
+          {
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "StageName": "dev"
+          }
+        ]
+      },
+      "DependsOn": "ApiGatewayDeployment1637965876576"
+    },
+    "ApiGatewayUsagePlanFree": {
       "Type": "AWS::ApiGateway::UsagePlan",
-      "DependsOn": "ApiGatewayDeployment1637965399922",
+      "DependsOn": "ApiGatewayDeployment1637965876576",
       "Properties": {
         "ApiStages": [
           {
@@ -1042,8 +1058,8 @@
             "Stage": "dev"
           }
         ],
-        "Description": "Usage plan for AlbertoFerroSLS dev stage",
-        "UsagePlanName": "AlbertoFerroSLS-dev",
+        "Description": "Usage plan \"free\" for AlbertoFerroSLS dev stage",
+        "UsagePlanName": "AlbertoFerroSLS-free-dev",
         "Quota": {
           "Limit": 1000,
           "Period": "MONTH"
@@ -1054,15 +1070,51 @@
         }
       }
     },
-    "ApiGatewayUsagePlanKey1": {
+    "ApiGatewayUsagePlanPaid": {
+      "Type": "AWS::ApiGateway::UsagePlan",
+      "DependsOn": "ApiGatewayDeployment1637965876576",
+      "Properties": {
+        "ApiStages": [
+          {
+            "ApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "Stage": "dev"
+          }
+        ],
+        "Description": "Usage plan \"paid\" for AlbertoFerroSLS dev stage",
+        "UsagePlanName": "AlbertoFerroSLS-paid-dev",
+        "Quota": {
+          "Limit": 10000,
+          "Period": "MONTH"
+        },
+        "Throttle": {
+          "BurstLimit": 200,
+          "RateLimit": 50
+        }
+      }
+    },
+    "ApiGatewayUsagePlanKeyFree1": {
       "Type": "AWS::ApiGateway::UsagePlanKey",
       "Properties": {
         "KeyId": {
-          "Ref": "ApiGatewayApiKey1"
+          "Ref": "ApiGatewayApiKeyFree1"
         },
         "KeyType": "API_KEY",
         "UsagePlanId": {
-          "Ref": "ApiGatewayUsagePlan"
+          "Ref": "ApiGatewayUsagePlanFree"
+        }
+      }
+    },
+    "ApiGatewayUsagePlanKeyPaid1": {
+      "Type": "AWS::ApiGateway::UsagePlanKey",
+      "Properties": {
+        "KeyId": {
+          "Ref": "ApiGatewayApiKeyPaid1"
+        },
+        "KeyType": "API_KEY",
+        "UsagePlanId": {
+          "Ref": "ApiGatewayUsagePlanPaid"
         }
       }
     },
