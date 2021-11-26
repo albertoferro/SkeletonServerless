@@ -1,5 +1,5 @@
 service: AlbertoFerroSLS
-frameworkVersion: '2'
+frameworkVersion: "2"
 
 provider:
   name: aws
@@ -9,20 +9,31 @@ provider:
   region: us-west-2
   environment:
     tableName: ${self:custom.tableName}
+    bucketName: ${self:custom.bucketName}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:*
-      Resource: '*'
+        - s3:*
+      Resource: "*"
+  apiGateway:
+    apiKeys:
+      -MyFirstIPIKey
+    usagePlan:
+      quota:
+        limit: 1000
+        period: MONTH
+      throttle:
+        rateLimit: 5
+        burstLimit: 20
 
-
-plugins:
-  -serverless-s3-sync
+plugins: -serverless-s3-sync
 
 custom:
   tableName: player-points
+  bucketName: albertoferro-sls
   s3Sync:
-    - bucketName: serverless-albertoferro
+    - bucketName: ${self:custom.bucketName}
       localDir: UploadData
 
 functions:
@@ -33,6 +44,7 @@ functions:
           path: get-user/{ID}
           method: GET
           cors: true
+          private: true
   getPlayerScore:
     handler: lambdas/endpoints/getPlayerScore.handler
     events:
@@ -45,18 +57,32 @@ functions:
     events:
       - http:
           path: create-player-score/{ID}
+          method: PUT
+          cors: true
+  createFile:
+    handler: lambdas/endpoints/createFile.handler
+    events:
+      - http:
+          path: create-file/{fileName}
           method: POST
+          cors: true
+  getFile:
+    handler: lambdas/endpoints/getFile.handler
+    events:
+      - http:
+          path: get-file/{fileName}
+          method: GET
           cors: true
 
 resources:
- Resources:
-   BucketUpload:
-     Type: AWS::S3::Bucket
-     Properties:
-       BucketName: albertoferro-sls
-   MyDynamoDBTable:
-     Type: AWS::DynamoDB::Table
-     Properties:
+  Resources:
+    BucketUpload:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucketName}
+    MyDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
         TableName: ${self:custom.tableName}
         AttributeDefinitions:
           - AttributeName: ID

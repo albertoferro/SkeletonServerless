@@ -89,6 +89,18 @@
         "LogGroupName": "/aws/lambda/AlbertoFerroSLS-dev-createPlayerScore"
       }
     },
+    "CreateFileLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/AlbertoFerroSLS-dev-createFile"
+      }
+    },
+    "GetFileLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/AlbertoFerroSLS-dev-getFile"
+      }
+    },
     "IamRoleLambdaExecution": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -149,7 +161,8 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "dynamodb:*"
+                    "dynamodb:*",
+                    "s3:*"
                   ],
                   "Resource": "*"
                 }
@@ -180,7 +193,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1637962104919-2021-11-26T21:28:24.919Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/getUser.handler",
         "Runtime": "nodejs12.x",
@@ -189,7 +202,8 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "tableName": "player-points"
+            "tableName": "player-points",
+            "bucketName": "albertoferro-sls"
           }
         },
         "Role": {
@@ -210,7 +224,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1637962104919-2021-11-26T21:28:24.919Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/getPlayerScore.handler",
         "Runtime": "nodejs12.x",
@@ -219,7 +233,8 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "tableName": "player-points"
+            "tableName": "player-points",
+            "bucketName": "albertoferro-sls"
           }
         },
         "Role": {
@@ -240,7 +255,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1637962104919-2021-11-26T21:28:24.919Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/createPlayerScore.handler",
         "Runtime": "nodejs12.x",
@@ -249,7 +264,8 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "tableName": "player-points"
+            "tableName": "player-points",
+            "bucketName": "albertoferro-sls"
           }
         },
         "Role": {
@@ -263,34 +279,116 @@
         "CreatePlayerScoreLogGroup"
       ]
     },
-    "GetUserLambdaVersionWqqxbpn04oiPsXTbtAoFCJcTHFaMl4iTcS1riEyMvo": {
+    "CreateFileLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
+        },
+        "Handler": "lambdas/endpoints/createFile.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "AlbertoFerroSLS-dev-createFile",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "tableName": "player-points",
+            "bucketName": "albertoferro-sls"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "CreateFileLogGroup"
+      ]
+    },
+    "GetFileLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637965403512-2021-11-26T22:23:23.512Z/AlbertoFerroSLS.zip"
+        },
+        "Handler": "lambdas/endpoints/getFile.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "AlbertoFerroSLS-dev-getFile",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "tableName": "player-points",
+            "bucketName": "albertoferro-sls"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetFileLogGroup"
+      ]
+    },
+    "GetUserLambdaVersionDP9PKYTKwXe8JrcfXSyfrgP0dGRE1XcpYZ90wlJgTU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetUserLambdaFunction"
         },
-        "CodeSha256": "UgbKSv8I9C0lJVovsTndI8r5Jgt8yaB/7H25X7tvSnE="
+        "CodeSha256": "Veep2cJGX+mIxA3kpkgGg1LCFRyAOWdVap9g6j3sLBQ="
       }
     },
-    "GetPlayerScoreLambdaVersion48aaWAfcl6MDUqN18tuLt64cifQ09onGyFVt1rJ8": {
+    "GetPlayerScoreLambdaVersionPSe63QF6xL3yITMKru1sTiQ4ns51CEfZjOs8hTapEKI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetPlayerScoreLambdaFunction"
         },
-        "CodeSha256": "UgbKSv8I9C0lJVovsTndI8r5Jgt8yaB/7H25X7tvSnE="
+        "CodeSha256": "Veep2cJGX+mIxA3kpkgGg1LCFRyAOWdVap9g6j3sLBQ="
       }
     },
-    "CreatePlayerScoreLambdaVersionkdTb01skTCdLBOy3hLVf5aRJYIHQOG6tbEMvhJbk": {
+    "CreatePlayerScoreLambdaVersionLG6aUvtN2S8jFyjvwFydOR28gcGXibaHanilqavSOk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreatePlayerScoreLambdaFunction"
         },
-        "CodeSha256": "UgbKSv8I9C0lJVovsTndI8r5Jgt8yaB/7H25X7tvSnE="
+        "CodeSha256": "Veep2cJGX+mIxA3kpkgGg1LCFRyAOWdVap9g6j3sLBQ="
+      }
+    },
+    "CreateFileLambdaVersionWLtI2yqs4Dp7PrzkoJ3OighTXBqlj1F9DkcYDobh24": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CreateFileLambdaFunction"
+        },
+        "CodeSha256": "Veep2cJGX+mIxA3kpkgGg1LCFRyAOWdVap9g6j3sLBQ="
+      }
+    },
+    "GetFileLambdaVersions9QC1dZeu7ckBO7Js7d63MrqgKWwYpQcQGaMkh6Q": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetFileLambdaFunction"
+        },
+        "CodeSha256": "Veep2cJGX+mIxA3kpkgGg1LCFRyAOWdVap9g6j3sLBQ="
       }
     },
     "ApiGatewayRestApi": {
@@ -381,6 +479,60 @@
           "Ref": "ApiGatewayResourceCreateDashplayerDashscore"
         },
         "PathPart": "{ID}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceCreateDashfile": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "create-file",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceCreateDashfileFilenameVar": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceCreateDashfile"
+        },
+        "PathPart": "{fileName}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetDashfile": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "get-file",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetDashfileFilenameVar": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceGetDashfile"
+        },
+        "PathPart": "{fileName}",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -505,7 +657,7 @@
               "ResponseParameters": {
                 "method.response.header.Access-Control-Allow-Origin": "'*'",
                 "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,PUT'"
               },
               "ResponseTemplates": {
                 "application/json": ""
@@ -515,6 +667,96 @@
         },
         "ResourceId": {
           "Ref": "ApiGatewayResourceCreateDashplayerDashscoreIdVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodCreateDashfileFilenameVarOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceCreateDashfileFilenameVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodGetDashfileFilenameVarOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetDashfileFilenameVar"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -532,7 +774,7 @@
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         },
-        "ApiKeyRequired": false,
+        "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "Integration": {
           "IntegrationHttpMethod": "POST",
@@ -613,10 +855,10 @@
         "GetPlayerScoreLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayMethodCreateDashplayerDashscoreIdVarPost": {
+    "ApiGatewayMethodCreateDashplayerDashscoreIdVarPut": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
-        "HttpMethod": "POST",
+        "HttpMethod": "PUT",
         "RequestParameters": {},
         "ResourceId": {
           "Ref": "ApiGatewayResourceCreateDashplayerDashscoreIdVar"
@@ -659,7 +901,99 @@
         "CreatePlayerScoreLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1637962101517": {
+    "ApiGatewayMethodCreateDashfileFilenameVarPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceCreateDashfileFilenameVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "CreateFileLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "CreateFileLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodGetDashfileFilenameVarGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetDashfileFilenameVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetFileLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "GetFileLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayDeployment1637965399922": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -671,10 +1005,66 @@
         "ApiGatewayMethodGetDashuserIdVarOptions",
         "ApiGatewayMethodGetDashplayerDashscoreIdVarOptions",
         "ApiGatewayMethodCreateDashplayerDashscoreIdVarOptions",
+        "ApiGatewayMethodCreateDashfileFilenameVarOptions",
+        "ApiGatewayMethodGetDashfileFilenameVarOptions",
         "ApiGatewayMethodGetDashuserIdVarGet",
         "ApiGatewayMethodGetDashplayerDashscoreIdVarGet",
-        "ApiGatewayMethodCreateDashplayerDashscoreIdVarPost"
+        "ApiGatewayMethodCreateDashplayerDashscoreIdVarPut",
+        "ApiGatewayMethodCreateDashfileFilenameVarPost",
+        "ApiGatewayMethodGetDashfileFilenameVarGet"
       ]
+    },
+    "ApiGatewayApiKey1": {
+      "Type": "AWS::ApiGateway::ApiKey",
+      "Properties": {
+        "Enabled": true,
+        "Name": "-MyFirstIPIKey",
+        "StageKeys": [
+          {
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "StageName": "dev"
+          }
+        ]
+      },
+      "DependsOn": "ApiGatewayDeployment1637965399922"
+    },
+    "ApiGatewayUsagePlan": {
+      "Type": "AWS::ApiGateway::UsagePlan",
+      "DependsOn": "ApiGatewayDeployment1637965399922",
+      "Properties": {
+        "ApiStages": [
+          {
+            "ApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "Stage": "dev"
+          }
+        ],
+        "Description": "Usage plan for AlbertoFerroSLS dev stage",
+        "UsagePlanName": "AlbertoFerroSLS-dev",
+        "Quota": {
+          "Limit": 1000,
+          "Period": "MONTH"
+        },
+        "Throttle": {
+          "BurstLimit": 20,
+          "RateLimit": 5
+        }
+      }
+    },
+    "ApiGatewayUsagePlanKey1": {
+      "Type": "AWS::ApiGateway::UsagePlanKey",
+      "Properties": {
+        "KeyId": {
+          "Ref": "ApiGatewayApiKey1"
+        },
+        "KeyType": "API_KEY",
+        "UsagePlanId": {
+          "Ref": "ApiGatewayUsagePlan"
+        }
+      }
     },
     "GetUserLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
@@ -787,6 +1177,80 @@
         }
       }
     },
+    "CreateFileLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "CreateFileLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetFileLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetFileLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
     "BucketUpload": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
@@ -825,7 +1289,7 @@
     "GetUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetUserLambdaVersionWqqxbpn04oiPsXTbtAoFCJcTHFaMl4iTcS1riEyMvo"
+        "Ref": "GetUserLambdaVersionDP9PKYTKwXe8JrcfXSyfrgP0dGRE1XcpYZ90wlJgTU"
       },
       "Export": {
         "Name": "sls-AlbertoFerroSLS-dev-GetUserLambdaFunctionQualifiedArn"
@@ -834,7 +1298,7 @@
     "GetPlayerScoreLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetPlayerScoreLambdaVersion48aaWAfcl6MDUqN18tuLt64cifQ09onGyFVt1rJ8"
+        "Ref": "GetPlayerScoreLambdaVersionPSe63QF6xL3yITMKru1sTiQ4ns51CEfZjOs8hTapEKI"
       },
       "Export": {
         "Name": "sls-AlbertoFerroSLS-dev-GetPlayerScoreLambdaFunctionQualifiedArn"
@@ -843,10 +1307,28 @@
     "CreatePlayerScoreLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreatePlayerScoreLambdaVersionkdTb01skTCdLBOy3hLVf5aRJYIHQOG6tbEMvhJbk"
+        "Ref": "CreatePlayerScoreLambdaVersionLG6aUvtN2S8jFyjvwFydOR28gcGXibaHanilqavSOk"
       },
       "Export": {
         "Name": "sls-AlbertoFerroSLS-dev-CreatePlayerScoreLambdaFunctionQualifiedArn"
+      }
+    },
+    "CreateFileLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CreateFileLambdaVersionWLtI2yqs4Dp7PrzkoJ3OighTXBqlj1F9DkcYDobh24"
+      },
+      "Export": {
+        "Name": "sls-AlbertoFerroSLS-dev-CreateFileLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetFileLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetFileLambdaVersions9QC1dZeu7ckBO7Js7d63MrqgKWwYpQcQGaMkh6Q"
+      },
+      "Export": {
+        "Name": "sls-AlbertoFerroSLS-dev-GetFileLambdaFunctionQualifiedArn"
       }
     },
     "ServiceEndpoint": {

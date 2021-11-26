@@ -22,7 +22,7 @@ exports.handler = async (event) => {
         return null;
     })
 
-    if (!user){
+    if (!newUser){
         return Responses._400({message: 'faild to write user by ID'})
     }
 
