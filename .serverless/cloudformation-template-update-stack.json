@@ -74,7 +74,7 @@
     "GetUserLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/pruebaserverless-dev-getUser"
+        "LogGroupName": "/aws/lambda/AlbertoFerroSLS-dev-getUser"
       }
     },
     "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "pruebaserverless",
+                  "AlbertoFerroSLS",
                   "dev",
                   "lambda"
                 ]
@@ -119,7 +119,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/pruebaserverless-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/AlbertoFerroSLS-dev*:*"
                     }
                   ]
                 },
@@ -130,7 +130,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/pruebaserverless-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/AlbertoFerroSLS-dev*:*:*"
                     }
                   ]
                 }
@@ -143,7 +143,7 @@
           "Fn::Join": [
             "-",
             [
-              "pruebaserverless",
+              "AlbertoFerroSLS",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -161,11 +161,11 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/pruebaserverless/dev/1637934306408-2021-11-26T13:45:06.408Z/pruebaserverless.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1637949168633-2021-11-26T17:52:48.633Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/getUser.handler",
         "Runtime": "nodejs12.x",
-        "FunctionName": "pruebaserverless-dev-getUser",
+        "FunctionName": "AlbertoFerroSLS-dev-getUser",
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
@@ -179,20 +179,20 @@
         "GetUserLogGroup"
       ]
     },
-    "GetUserLambdaVersionck7OcgnHOq9WQdj5pCrZSlqDF9HtjEVBOQdyXLqwo": {
+    "GetUserLambdaVersioncEl2bczEiKtjcLPD6Rd2xQGUp0WqgCignr9qlqGk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetUserLambdaFunction"
         },
-        "CodeSha256": "RjoqrqXU7zeovjp0V4b+V+88YRQj5DK67zFS5a47DKI="
+        "CodeSha256": "t83L+eLceQAGJDCvZJfIliwXqSSeB8eHIdEhUc9pNlM="
       }
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-pruebaserverless",
+        "Name": "dev-AlbertoFerroSLS",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -319,7 +319,7 @@
         "GetUserLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1637934303027": {
+    "ApiGatewayDeployment1637949165184": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -369,10 +369,29 @@
         }
       }
     },
-    "NewResource": {
+    "BucketUpload": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "BucketName": "serverless-albertoferro"
+      }
+    },
+    "MyDynamoDBTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "player-points",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "ID",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "ID",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
       }
     }
   },
@@ -382,16 +401,16 @@
         "Ref": "ServerlessDeploymentBucket"
       },
       "Export": {
-        "Name": "sls-pruebaserverless-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-AlbertoFerroSLS-dev-ServerlessDeploymentBucketName"
       }
     },
     "GetUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetUserLambdaVersionck7OcgnHOq9WQdj5pCrZSlqDF9HtjEVBOQdyXLqwo"
+        "Ref": "GetUserLambdaVersioncEl2bczEiKtjcLPD6Rd2xQGUp0WqgCignr9qlqGk"
       },
       "Export": {
-        "Name": "sls-pruebaserverless-dev-GetUserLambdaFunctionQualifiedArn"
+        "Name": "sls-AlbertoFerroSLS-dev-GetUserLambdaFunctionQualifiedArn"
       }
     },
     "ServiceEndpoint": {
@@ -417,7 +436,7 @@
         ]
       },
       "Export": {
-        "Name": "sls-pruebaserverless-dev-ServiceEndpoint"
+        "Name": "sls-AlbertoFerroSLS-dev-ServiceEndpoint"
       }
     }
   }
