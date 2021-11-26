@@ -32,12 +32,20 @@ provider:
 
 plugins:
   -serverless-s3-sync
+  -serverless-webpack
+
+package:
+  individually: true
 
 custom:
   s3Sync:
     - bucketName: serverless-albertoferro
       localDir: UploadData
-
+  webpack:
+    webpackConfig: 'webpack.config.js' # Name of webpack configuration file
+    includeModules: false # Node modules configuration for packaging
+    packager: 'npm' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
 #    role:
@@ -122,7 +130,7 @@ resources:
    NewResource:
      Type: AWS::S3::Bucket
      Properties:
-       BucketName: serverless-albertoferro
+       BucketName: serverless-albertoferro2
 #  Outputs:
 #     NewOutput:
 #       Description: "Description for the output"
