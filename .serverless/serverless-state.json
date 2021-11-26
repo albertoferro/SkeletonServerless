@@ -10,6 +10,18 @@
       "lambdaHashingVersion": "20201221",
       "profile": "serverlessUser",
       "region": "us-west-2",
+      "environment": {
+        "tableName": "player-points"
+      },
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:*"
+          ],
+          "Resource": "*"
+        }
+      ],
       "stage": "dev",
       "versionFunctions": true,
       "compiledCloudFormationTemplate": {
@@ -91,6 +103,12 @@
               "LogGroupName": "/aws/lambda/AlbertoFerroSLS-dev-getUser"
             }
           },
+          "GetPlayerScoreLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/AlbertoFerroSLS-dev-getPlayerScore"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -147,6 +165,9 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/AlbertoFerroSLS-dev*:*:*"
                           }
                         ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][0]"
                       }
                     ]
                   }
@@ -175,13 +196,18 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/AlbertoFerroSLS/dev/1637949472301-2021-11-26T17:57:52.301Z/AlbertoFerroSLS.zip"
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1637951730176-2021-11-26T18:35:30.176Z/AlbertoFerroSLS.zip"
               },
-              "Handler": "lambdas/getUser.handler",
+              "Handler": "lambdas/endpoints/getUser.handler",
               "Runtime": "nodejs12.x",
               "FunctionName": "AlbertoFerroSLS-dev-getUser",
               "MemorySize": 1024,
               "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "tableName": "player-points"
+                }
+              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -193,14 +219,54 @@
               "GetUserLogGroup"
             ]
           },
-          "GetUserLambdaVersioncEl2bczEiKtjcLPD6Rd2xQGUp0WqgCignr9qlqGk": {
+          "GetPlayerScoreLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1637951730176-2021-11-26T18:35:30.176Z/AlbertoFerroSLS.zip"
+              },
+              "Handler": "lambdas/endpoints/getPlayerScore.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "AlbertoFerroSLS-dev-getPlayerScore",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "tableName": "player-points"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetPlayerScoreLogGroup"
+            ]
+          },
+          "GetUserLambdaVersionkIQtNZVy4FFoskVXM5QdFsdZTbPrIQGQ9JuJnKi0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetUserLambdaFunction"
               },
-              "CodeSha256": "t83L+eLceQAGJDCvZJfIliwXqSSeB8eHIdEhUc9pNlM="
+              "CodeSha256": "fdqnjb2GfTL5lGl80u0svx7wJ0f2lJIKNlP3SDTOuUM="
+            }
+          },
+          "GetPlayerScoreLambdaVersionUp0BUkHXT1nhLElq56kvlVeKuj2o1wzKObiIlkP4": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetPlayerScoreLambdaFunction"
+              },
+              "CodeSha256": "fdqnjb2GfTL5lGl80u0svx7wJ0f2lJIKNlP3SDTOuUM="
             }
           },
           "ApiGatewayRestApi": {
@@ -235,6 +301,33 @@
             "Properties": {
               "ParentId": {
                 "Ref": "ApiGatewayResourceGetDashuser"
+              },
+              "PathPart": "{ID}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceGetDashplayerDashscore": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "get-player-score",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceGetDashplayerDashscoreIdVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceGetDashplayerDashscore"
               },
               "PathPart": "{ID}",
               "RestApiId": {
@@ -287,6 +380,51 @@
               }
             }
           },
+          "ApiGatewayMethodGetDashplayerDashscoreIdVarOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceGetDashplayerDashscoreIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
           "ApiGatewayMethodGetDashuserIdVarGet": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
@@ -333,7 +471,53 @@
               "GetUserLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1637949468632": {
+          "ApiGatewayMethodGetDashplayerDashscoreIdVarGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceGetDashplayerDashscoreIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "GetPlayerScoreLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "GetPlayerScoreLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1637951726673": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -343,7 +527,9 @@
             },
             "DependsOn": [
               "ApiGatewayMethodGetDashuserIdVarOptions",
-              "ApiGatewayMethodGetDashuserIdVarGet"
+              "ApiGatewayMethodGetDashplayerDashscoreIdVarOptions",
+              "ApiGatewayMethodGetDashuserIdVarGet",
+              "ApiGatewayMethodGetDashplayerDashscoreIdVarGet"
             ]
           },
           "GetUserLambdaPermissionApiGateway": {
@@ -352,6 +538,43 @@
               "FunctionName": {
                 "Fn::GetAtt": [
                   "GetUserLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "GetPlayerScoreLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetPlayerScoreLambdaFunction",
                   "Arn"
                 ]
               },
@@ -421,10 +644,19 @@
           "GetUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetUserLambdaVersioncEl2bczEiKtjcLPD6Rd2xQGUp0WqgCignr9qlqGk"
+              "Ref": "GetUserLambdaVersionkIQtNZVy4FFoskVXM5QdFsdZTbPrIQGQ9JuJnKi0"
             },
             "Export": {
               "Name": "sls-AlbertoFerroSLS-dev-GetUserLambdaFunctionQualifiedArn"
+            }
+          },
+          "GetPlayerScoreLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetPlayerScoreLambdaVersionUp0BUkHXT1nhLElq56kvlVeKuj2o1wzKObiIlkP4"
+            },
+            "Export": {
+              "Name": "sls-AlbertoFerroSLS-dev-GetPlayerScoreLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -552,7 +784,7 @@
     "pluginsData": {},
     "functions": {
       "getUser": {
-        "handler": "lambdas/getUser.handler",
+        "handler": "lambdas/endpoints/getUser.handler",
         "events": [
           {
             "http": {
@@ -584,7 +816,42 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "GetUserLambdaVersioncEl2bczEiKtjcLPD6Rd2xQGUp0WqgCignr9qlqGk"
+        "versionLogicalId": "GetUserLambdaVersionkIQtNZVy4FFoskVXM5QdFsdZTbPrIQGQ9JuJnKi0"
+      },
+      "getPlayerScore": {
+        "handler": "lambdas/endpoints/getPlayerScore.handler",
+        "events": [
+          {
+            "http": {
+              "path": "get-player-score/{ID}",
+              "method": "get",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "AlbertoFerroSLS-dev-getPlayerScore",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {},
+        "versionLogicalId": "GetPlayerScoreLambdaVersionUp0BUkHXT1nhLElq56kvlVeKuj2o1wzKObiIlkP4"
       }
     },
     "resources": {
@@ -645,7 +912,7 @@
     "artifact": "D:\\Proyectos\\serverless\\SkeletonServerless\\.serverless\\AlbertoFerroSLS.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/AlbertoFerroSLS/dev/1637949472301-2021-11-26T17:57:52.301Z",
+    "artifactDirectoryName": "serverless/AlbertoFerroSLS/dev/1637951730176-2021-11-26T18:35:30.176Z",
     "artifact": "AlbertoFerroSLS.zip"
   }
 }
