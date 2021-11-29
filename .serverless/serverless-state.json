@@ -19,7 +19,8 @@
           "Effect": "Allow",
           "Action": [
             "dynamodb:*",
-            "s3:*"
+            "s3:*",
+            "ses:*"
           ],
           "Resource": "*"
         }
@@ -169,6 +170,12 @@
               "LogGroupName": "/aws/lambda/AlbertoFerroSLS-dev-getFile"
             }
           },
+          "SendEmailLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/AlbertoFerroSLS-dev-sendEmail"
+            }
+          },
           "ProxyLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
@@ -262,7 +269,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/AlbertoFerroSLS/dev/1637966628194-2021-11-26T22:43:48.194Z/AlbertoFerroSLS.zip"
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
               },
               "Handler": "lambdas/endpoints/getUser.handler",
               "Runtime": "nodejs12.x",
@@ -293,7 +300,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/AlbertoFerroSLS/dev/1637966628194-2021-11-26T22:43:48.194Z/AlbertoFerroSLS.zip"
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
               },
               "Handler": "lambdas/endpoints/getPlayerScore.handler",
               "Runtime": "nodejs12.x",
@@ -324,7 +331,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/AlbertoFerroSLS/dev/1637966628194-2021-11-26T22:43:48.194Z/AlbertoFerroSLS.zip"
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
               },
               "Handler": "lambdas/endpoints/createPlayerScore.handler",
               "Runtime": "nodejs12.x",
@@ -355,7 +362,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/AlbertoFerroSLS/dev/1637966628194-2021-11-26T22:43:48.194Z/AlbertoFerroSLS.zip"
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
               },
               "Handler": "lambdas/endpoints/createFile.handler",
               "Runtime": "nodejs12.x",
@@ -386,7 +393,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/AlbertoFerroSLS/dev/1637966628194-2021-11-26T22:43:48.194Z/AlbertoFerroSLS.zip"
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
               },
               "Handler": "lambdas/endpoints/getFile.handler",
               "Runtime": "nodejs12.x",
@@ -410,6 +417,37 @@
               "GetFileLogGroup"
             ]
           },
+          "SendEmailLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
+              },
+              "Handler": "lambdas/endpoints/sendEmail.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "AlbertoFerroSLS-dev-sendEmail",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "tableName": "player-points",
+                  "bucketName": "albertoferro-sls"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "SendEmailLogGroup"
+            ]
+          },
           "ProxyLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -417,7 +455,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/AlbertoFerroSLS/dev/1637966628194-2021-11-26T22:43:48.194Z/AlbertoFerroSLS.zip"
+                "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
               },
               "Handler": "lambdas/endpoints/proxy.handler",
               "Runtime": "nodejs12.x",
@@ -441,64 +479,74 @@
               "ProxyLogGroup"
             ]
           },
-          "GetUserLambdaVersion6QlLK2fOiIxRbRF7U3VpPz3me7TwT1TLC5FwVOQQM": {
+          "GetUserLambdaVersionJzhAsRHFxlTo4hbbah24CpXGH7jdGXG4aSWRELXV4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetUserLambdaFunction"
               },
-              "CodeSha256": "wiRVnrLYvxgNI9DNUKLHPMPAqXCvyMYwXzKYssmMKfM="
+              "CodeSha256": "Q8mont61BOv+XlgTCl6Q3HT4p0FbO0D+C4+d+EQIFMc="
             }
           },
-          "GetPlayerScoreLambdaVersionyIQ9puRdBjTAldfCxqDg1bwKp0GHki3xNV3ixXD8E": {
+          "GetPlayerScoreLambdaVersionpVhZcwE2bjY5N5tuDZ6lNCWf6nWTDQLES6ScTeDbM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetPlayerScoreLambdaFunction"
               },
-              "CodeSha256": "wiRVnrLYvxgNI9DNUKLHPMPAqXCvyMYwXzKYssmMKfM="
+              "CodeSha256": "Q8mont61BOv+XlgTCl6Q3HT4p0FbO0D+C4+d+EQIFMc="
             }
           },
-          "CreatePlayerScoreLambdaVersion7vy9nME1UVgNfWdI2tuazNHO3kMFdj1n8E0BZ60iIak": {
+          "CreatePlayerScoreLambdaVersionC8Niozkgq2h0OMHIYWgEYHonMQjn7KMr0qjiqJr0ZI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreatePlayerScoreLambdaFunction"
               },
-              "CodeSha256": "wiRVnrLYvxgNI9DNUKLHPMPAqXCvyMYwXzKYssmMKfM="
+              "CodeSha256": "Q8mont61BOv+XlgTCl6Q3HT4p0FbO0D+C4+d+EQIFMc="
             }
           },
-          "CreateFileLambdaVersionbNa5Kp0geSJa97SeIJG8p72IA2UcnLV80xQKJgKqu7k": {
+          "CreateFileLambdaVersionxAG17RMDR7Afniabj3UDUDiUqyJiSwTRbWWkgB9VyZM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateFileLambdaFunction"
               },
-              "CodeSha256": "wiRVnrLYvxgNI9DNUKLHPMPAqXCvyMYwXzKYssmMKfM="
+              "CodeSha256": "Q8mont61BOv+XlgTCl6Q3HT4p0FbO0D+C4+d+EQIFMc="
             }
           },
-          "GetFileLambdaVersionCt4gVdM4e96VDmmzu8lnAmjf7vWlCwUw37NeRt5Q": {
+          "GetFileLambdaVersiongtQz7kThHkEjhsXBl0a1mqN0yHHaLpCMh0KIvWk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetFileLambdaFunction"
               },
-              "CodeSha256": "wiRVnrLYvxgNI9DNUKLHPMPAqXCvyMYwXzKYssmMKfM="
+              "CodeSha256": "Q8mont61BOv+XlgTCl6Q3HT4p0FbO0D+C4+d+EQIFMc="
             }
           },
-          "ProxyLambdaVersionOwh3y6LXJibkYWxq9e0DadAKPHvZZw4hW3KtUliEU7g": {
+          "SendEmailLambdaVersionMUpuFqoCs1GQZALP7hcuUTPei6PZEQ5PV08bTDKGE": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "SendEmailLambdaFunction"
+              },
+              "CodeSha256": "Q8mont61BOv+XlgTCl6Q3HT4p0FbO0D+C4+d+EQIFMc="
+            }
+          },
+          "ProxyLambdaVersion4qIwcOHyzTIaXmUbzdJaEzFTyzAsoF2E12ED5WHraU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ProxyLambdaFunction"
               },
-              "CodeSha256": "wiRVnrLYvxgNI9DNUKLHPMPAqXCvyMYwXzKYssmMKfM="
+              "CodeSha256": "Q8mont61BOv+XlgTCl6Q3HT4p0FbO0D+C4+d+EQIFMc="
             }
           },
           "ApiGatewayRestApi": {
@@ -643,6 +691,21 @@
                 "Ref": "ApiGatewayResourceGetDashfile"
               },
               "PathPart": "{fileName}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceSendDashemail": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "send-email",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -900,6 +963,51 @@
               }
             }
           },
+          "ApiGatewayMethodSendDashemailOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSendDashemail"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
           "ApiGatewayMethodGetDashuserIdVarGet": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
@@ -1130,6 +1238,52 @@
               "GetFileLambdaPermissionApiGateway"
             ]
           },
+          "ApiGatewayMethodSendDashemailPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSendDashemail"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "SendEmailLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "SendEmailLambdaPermissionApiGateway"
+            ]
+          },
           "ApiGatewayMethodChuckDashnorrisProxyVarAny": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
@@ -1173,7 +1327,7 @@
               "Name": "AlbertoFerroSLS-dev | Validate request body and querystring parameters"
             }
           },
-          "ApiGatewayDeployment1637966624728": {
+          "ApiGatewayDeployment1638217089350": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -1187,11 +1341,13 @@
               "ApiGatewayMethodCreateDashplayerDashscoreIdVarOptions",
               "ApiGatewayMethodCreateDashfileFilenameVarOptions",
               "ApiGatewayMethodGetDashfileFilenameVarOptions",
+              "ApiGatewayMethodSendDashemailOptions",
               "ApiGatewayMethodGetDashuserIdVarGet",
               "ApiGatewayMethodGetDashplayerDashscoreIdVarGet",
               "ApiGatewayMethodCreateDashplayerDashscoreIdVarPut",
               "ApiGatewayMethodCreateDashfileFilenameVarPost",
               "ApiGatewayMethodGetDashfileFilenameVarGet",
+              "ApiGatewayMethodSendDashemailPost",
               "ApiGatewayMethodChuckDashnorrisProxyVarAny"
             ]
           },
@@ -1209,7 +1365,7 @@
                 }
               ]
             },
-            "DependsOn": "ApiGatewayDeployment1637966624728"
+            "DependsOn": "ApiGatewayDeployment1638217089350"
           },
           "ApiGatewayApiKeyPaid1": {
             "Type": "AWS::ApiGateway::ApiKey",
@@ -1225,11 +1381,11 @@
                 }
               ]
             },
-            "DependsOn": "ApiGatewayDeployment1637966624728"
+            "DependsOn": "ApiGatewayDeployment1638217089350"
           },
           "ApiGatewayUsagePlanFree": {
             "Type": "AWS::ApiGateway::UsagePlan",
-            "DependsOn": "ApiGatewayDeployment1637966624728",
+            "DependsOn": "ApiGatewayDeployment1638217089350",
             "Properties": {
               "ApiStages": [
                 {
@@ -1253,7 +1409,7 @@
           },
           "ApiGatewayUsagePlanPaid": {
             "Type": "AWS::ApiGateway::UsagePlan",
-            "DependsOn": "ApiGatewayDeployment1637966624728",
+            "DependsOn": "ApiGatewayDeployment1638217089350",
             "Properties": {
               "ApiStages": [
                 {
@@ -1484,6 +1640,43 @@
               }
             }
           },
+          "SendEmailLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "SendEmailLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
           "ProxyLambdaPermissionApiGateway": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
@@ -1559,7 +1752,7 @@
           "GetUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetUserLambdaVersion6QlLK2fOiIxRbRF7U3VpPz3me7TwT1TLC5FwVOQQM"
+              "Ref": "GetUserLambdaVersionJzhAsRHFxlTo4hbbah24CpXGH7jdGXG4aSWRELXV4"
             },
             "Export": {
               "Name": "sls-AlbertoFerroSLS-dev-GetUserLambdaFunctionQualifiedArn"
@@ -1568,7 +1761,7 @@
           "GetPlayerScoreLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetPlayerScoreLambdaVersionyIQ9puRdBjTAldfCxqDg1bwKp0GHki3xNV3ixXD8E"
+              "Ref": "GetPlayerScoreLambdaVersionpVhZcwE2bjY5N5tuDZ6lNCWf6nWTDQLES6ScTeDbM"
             },
             "Export": {
               "Name": "sls-AlbertoFerroSLS-dev-GetPlayerScoreLambdaFunctionQualifiedArn"
@@ -1577,7 +1770,7 @@
           "CreatePlayerScoreLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreatePlayerScoreLambdaVersion7vy9nME1UVgNfWdI2tuazNHO3kMFdj1n8E0BZ60iIak"
+              "Ref": "CreatePlayerScoreLambdaVersionC8Niozkgq2h0OMHIYWgEYHonMQjn7KMr0qjiqJr0ZI"
             },
             "Export": {
               "Name": "sls-AlbertoFerroSLS-dev-CreatePlayerScoreLambdaFunctionQualifiedArn"
@@ -1586,7 +1779,7 @@
           "CreateFileLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateFileLambdaVersionbNa5Kp0geSJa97SeIJG8p72IA2UcnLV80xQKJgKqu7k"
+              "Ref": "CreateFileLambdaVersionxAG17RMDR7Afniabj3UDUDiUqyJiSwTRbWWkgB9VyZM"
             },
             "Export": {
               "Name": "sls-AlbertoFerroSLS-dev-CreateFileLambdaFunctionQualifiedArn"
@@ -1595,16 +1788,25 @@
           "GetFileLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetFileLambdaVersionCt4gVdM4e96VDmmzu8lnAmjf7vWlCwUw37NeRt5Q"
+              "Ref": "GetFileLambdaVersiongtQz7kThHkEjhsXBl0a1mqN0yHHaLpCMh0KIvWk"
             },
             "Export": {
               "Name": "sls-AlbertoFerroSLS-dev-GetFileLambdaFunctionQualifiedArn"
             }
           },
+          "SendEmailLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "SendEmailLambdaVersionMUpuFqoCs1GQZALP7hcuUTPei6PZEQ5PV08bTDKGE"
+            },
+            "Export": {
+              "Name": "sls-AlbertoFerroSLS-dev-SendEmailLambdaFunctionQualifiedArn"
+            }
+          },
           "ProxyLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ProxyLambdaVersionOwh3y6LXJibkYWxq9e0DadAKPHvZZw4hW3KtUliEU7g"
+              "Ref": "ProxyLambdaVersion4qIwcOHyzTIaXmUbzdJaEzFTyzAsoF2E12ED5WHraU"
             },
             "Export": {
               "Name": "sls-AlbertoFerroSLS-dev-ProxyLambdaFunctionQualifiedArn"
@@ -1769,7 +1971,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "GetUserLambdaVersion6QlLK2fOiIxRbRF7U3VpPz3me7TwT1TLC5FwVOQQM"
+        "versionLogicalId": "GetUserLambdaVersionJzhAsRHFxlTo4hbbah24CpXGH7jdGXG4aSWRELXV4"
       },
       "getPlayerScore": {
         "handler": "lambdas/endpoints/getPlayerScore.handler",
@@ -1804,7 +2006,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "GetPlayerScoreLambdaVersionyIQ9puRdBjTAldfCxqDg1bwKp0GHki3xNV3ixXD8E"
+        "versionLogicalId": "GetPlayerScoreLambdaVersionpVhZcwE2bjY5N5tuDZ6lNCWf6nWTDQLES6ScTeDbM"
       },
       "createPlayerScore": {
         "handler": "lambdas/endpoints/createPlayerScore.handler",
@@ -1839,7 +2041,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "CreatePlayerScoreLambdaVersion7vy9nME1UVgNfWdI2tuazNHO3kMFdj1n8E0BZ60iIak"
+        "versionLogicalId": "CreatePlayerScoreLambdaVersionC8Niozkgq2h0OMHIYWgEYHonMQjn7KMr0qjiqJr0ZI"
       },
       "createFile": {
         "handler": "lambdas/endpoints/createFile.handler",
@@ -1874,7 +2076,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "CreateFileLambdaVersionbNa5Kp0geSJa97SeIJG8p72IA2UcnLV80xQKJgKqu7k"
+        "versionLogicalId": "CreateFileLambdaVersionxAG17RMDR7Afniabj3UDUDiUqyJiSwTRbWWkgB9VyZM"
       },
       "getFile": {
         "handler": "lambdas/endpoints/getFile.handler",
@@ -1909,7 +2111,42 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "GetFileLambdaVersionCt4gVdM4e96VDmmzu8lnAmjf7vWlCwUw37NeRt5Q"
+        "versionLogicalId": "GetFileLambdaVersiongtQz7kThHkEjhsXBl0a1mqN0yHHaLpCMh0KIvWk"
+      },
+      "sendEmail": {
+        "handler": "lambdas/endpoints/sendEmail.handler",
+        "events": [
+          {
+            "http": {
+              "path": "send-email",
+              "method": "post",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "AlbertoFerroSLS-dev-sendEmail",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {},
+        "versionLogicalId": "SendEmailLambdaVersionMUpuFqoCs1GQZALP7hcuUTPei6PZEQ5PV08bTDKGE"
       },
       "proxy": {
         "handler": "lambdas/endpoints/proxy.handler",
@@ -1935,7 +2172,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "ProxyLambdaVersionOwh3y6LXJibkYWxq9e0DadAKPHvZZw4hW3KtUliEU7g"
+        "versionLogicalId": "ProxyLambdaVersion4qIwcOHyzTIaXmUbzdJaEzFTyzAsoF2E12ED5WHraU"
       }
     },
     "resources": {
@@ -1996,7 +2233,7 @@
     "artifact": "D:\\Proyectos\\serverless\\SkeletonServerless\\.serverless\\AlbertoFerroSLS.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/AlbertoFerroSLS/dev/1637966628194-2021-11-26T22:43:48.194Z",
+    "artifactDirectoryName": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z",
     "artifact": "AlbertoFerroSLS.zip"
   }
 }
