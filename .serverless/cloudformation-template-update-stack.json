@@ -206,7 +206,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1638231092414-2021-11-30T00:11:32.414Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/getUser.handler",
         "Runtime": "nodejs12.x",
@@ -237,7 +237,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1638231092414-2021-11-30T00:11:32.414Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/getPlayerScore.handler",
         "Runtime": "nodejs12.x",
@@ -268,7 +268,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1638231092414-2021-11-30T00:11:32.414Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/createPlayerScore.handler",
         "Runtime": "nodejs12.x",
@@ -299,7 +299,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1638231092414-2021-11-30T00:11:32.414Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/createFile.handler",
         "Runtime": "nodejs12.x",
@@ -330,7 +330,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1638231092414-2021-11-30T00:11:32.414Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/getFile.handler",
         "Runtime": "nodejs12.x",
@@ -361,7 +361,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1638231092414-2021-11-30T00:11:32.414Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/sendEmail.handler",
         "Runtime": "nodejs12.x",
@@ -392,7 +392,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/AlbertoFerroSLS/dev/1638217092731-2021-11-29T20:18:12.731Z/AlbertoFerroSLS.zip"
+          "S3Key": "serverless/AlbertoFerroSLS/dev/1638231092414-2021-11-30T00:11:32.414Z/AlbertoFerroSLS.zip"
         },
         "Handler": "lambdas/endpoints/proxy.handler",
         "Runtime": "nodejs12.x",
@@ -1264,7 +1264,7 @@
         "Name": "AlbertoFerroSLS-dev | Validate request body and querystring parameters"
       }
     },
-    "ApiGatewayDeployment1638217089350": {
+    "ApiGatewayDeployment1638231088987": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1302,7 +1302,7 @@
           }
         ]
       },
-      "DependsOn": "ApiGatewayDeployment1638217089350"
+      "DependsOn": "ApiGatewayDeployment1638231088987"
     },
     "ApiGatewayApiKeyPaid1": {
       "Type": "AWS::ApiGateway::ApiKey",
@@ -1318,11 +1318,11 @@
           }
         ]
       },
-      "DependsOn": "ApiGatewayDeployment1638217089350"
+      "DependsOn": "ApiGatewayDeployment1638231088987"
     },
     "ApiGatewayUsagePlanFree": {
       "Type": "AWS::ApiGateway::UsagePlan",
-      "DependsOn": "ApiGatewayDeployment1638217089350",
+      "DependsOn": "ApiGatewayDeployment1638231088987",
       "Properties": {
         "ApiStages": [
           {
@@ -1346,7 +1346,7 @@
     },
     "ApiGatewayUsagePlanPaid": {
       "Type": "AWS::ApiGateway::UsagePlan",
-      "DependsOn": "ApiGatewayDeployment1638217089350",
+      "DependsOn": "ApiGatewayDeployment1638231088987",
       "Properties": {
         "ApiStages": [
           {
@@ -1674,6 +1674,29 @@
           }
         ],
         "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "MyAssumeRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "myAssumeRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com",
+                  "apigateway.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        }
       }
     }
   },
