@@ -93,6 +93,13 @@ functions:
           path: send-email
           method: POST
           cors: true        
+  updatePlayerScore:
+    handler: lambdas/endpoints/updatePlayerScore.handler
+    events:
+      - http:
+          path: update-player-score/{ID}
+          method: PUT
+          cors: true
 
   proxy:
     handler: lambdas/endpoints/proxy.handler
